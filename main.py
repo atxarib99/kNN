@@ -5,6 +5,8 @@
 #get trainer and model
 import kNN as knn
 import TitanicParser
+#using pyplotlib to plot error with k
+import matplotlib.pyplot as plt
 
 #load trainer from knn
 trainer = knn.knn()
@@ -73,3 +75,12 @@ for i in range(len(testX)):
 print("K:", bestK)
 print("Error:", error / len(testX))
 print("Accuracy:", 1 - error / len(testX))
+
+#holds errors related to each k
+errors = []
+#for each k, add its respective error to errors list
+for k in ks:
+    errors.append(validErrors[k])
+#plot, k and errors
+plt.plot(ks, errors)
+plt.show()
