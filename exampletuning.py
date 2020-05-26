@@ -1,26 +1,32 @@
 '''
-    The main file. Sets up a kNN and tests its accuracy. Provided as an example.
+    This example file shows how to tune the hyper parameter k.
 '''
 
 #get trainer and model
 import kNN as knn
-import TitanicParser
+import modeler as model
 #using pyplotlib to plot error with k
 import matplotlib.pyplot as plt
 
-#load trainer from knn
+#get trainer
 trainer = knn.knn()
 
-#get train and test data
-X,Y,testX,testY,validX,validY = TitanicParser.loadData(validationSet=True)
+#get training data, with some noise
+X,Y = model.generateData(100, noiseFactor=.2)
 
-#load train data
+#get validation data, we will assert that this data has no noise, even though this is not accurate in real data
+validX, validY = model.generateData(25, noiseFactor=0)
+
+#get test data, also with no noise
+testX, testY = model.generateData(25, noiseFactor=0)
+
+#load training data
 trainer.loadData(X,Y)
 
 #holds error on validation set for each k
 validErrors = {}
 #setup k's to test
-ks = range(1, 25)
+ks = range(1, 100, 2)
 for k in ks:
     #holds the error count for this k
     error = 0
