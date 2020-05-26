@@ -22,7 +22,9 @@ trainer.load(X,Y)
 guess = trainer.predict(testX)
 ```
 
-A more complicated example, tuning the hyperparameter k is provided in main.py
+An example with a visual representation is provided in example.py
+An example without a visual representation is provided in examplesimple.py
+An example that tunes the hyper parameter k is provided in exampletuning.py
 
 ## Documentation
 
