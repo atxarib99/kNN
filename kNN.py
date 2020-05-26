@@ -10,7 +10,7 @@ class knn:
         This class is an object that holds the training examples for kNN and how to make predictions from it.
     '''
 
-    def __init__(self, nn=5):
+    def __init__(self, k=5):
         '''
             Initializes a kNN class. k can be provided for how many training examples should be taken into account for predictions.
             Smaller k means that the predictions will be noisy.
@@ -24,7 +24,7 @@ class knn:
         '''
         super().__init__()
 
-        self.nn = nn
+        self.nn = k
 
     def loadData(self,X,Y):
         '''
@@ -83,15 +83,15 @@ class knn:
             else:
                 #get key set
                 keySet = list(neighbors.keys())
-                #find furthest neighbor that's further than example
+                #find furthest neighbor
                 greatestDist = 0
                 for key in keySet:
                     if key > greatestDist:
                         greatestDist = key
-                #remove furthest neighbor if exists
-                if greatestDist != -1:
+                #if current example is closer than furthest, replace
+                dist = toPredict.dist(example)
+                if dist < greatestDist:
                     neighbors.pop(greatestDist)
-                    dist = toPredict.dist(example)
                     neighbors[dist] = example
         #find average of labels
         keySet = neighbors.keys()
