@@ -63,14 +63,17 @@ class knn:
         self.nn = k
 
     
-    def predict(self, X):
+    def predict(self, X, positiveValue = 1, negativeValue = -1):
         '''
             Given parameters, makes a prediction using training data
 
             Parameters:
                 X: Parameters for prediction
+                postiveValue: what should the value be if we guess True, usually 1.
+                negativeValue: what should the value be if we guess False, usually 0 or -1.
             Result:
-                Y: returns a prediction using kNN.
+                Y: returns a prediction using kNN. This also provides a confidence amount, it does not match the labels.
+                guess: returns a prediction that has been casted to match the provided labels as parameters.
         '''
         #convert X into an item object
         toPredict = _item(X, -1)
@@ -100,8 +103,13 @@ class knn:
         avg = 0
         for key in keySet:
             avg += neighbors[key].label
+        avg /= self.nn
+        if avg < .5:
+            guess = negativeValue
+        else:
+            guess = positiveValue
         #return average
-        return avg / self.nn
+        return avg, guess
 
 
 def eucdist(X1, X2):
