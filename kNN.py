@@ -1,9 +1,11 @@
 '''
-    This file serves the purpose of the main computation required for kNN (Nearest Neighbor)
+    This file serves the purpose of the main computation required for kNN (Nearest Neighbor). It also holds the class which represents a training example and the definition of euclidean distance
 '''
-#we will need to import sys and the item class
+
+#math is necessary for this class
+import math
+#we will need to import sys
 import sys
-import item
 
 class knn:
     '''
@@ -42,7 +44,7 @@ class knn:
         #for each example provided
         for i in range(len(X)):
             #add it as an item to the list
-            trainingExamples.append(item.item(X[i], Y[i]))
+            trainingExamples.append(_item(X[i], Y[i]))
         
         #save the list of created examples in this instance
         self.examples = trainingExamples
@@ -71,7 +73,7 @@ class knn:
                 Y: returns a prediction using kNN.
         '''
         #convert X into an item object
-        toPredict = item.item(X, -1)
+        toPredict = _item(X, -1)
         #holds nearest neighbors
         neighbors = {}
         #build nearest neighbors
@@ -100,3 +102,62 @@ class knn:
             avg += neighbors[key].label
         #return average
         return avg / self.nn
+
+
+def eucdist(X1, X2):
+    '''
+        Euclidean Distance. sqrt( (x1,0 - x2,0)^2 + ... + (x1,n - x2,n)^2 ), where n is number of parameters/dimensions.
+
+        Parameters:
+            X1: The parameters in the first object we are comparing as a list
+            X2: The parameters in the second object we are comparing as a list
+        
+        Result:
+            The euclidean distance between the two points
+    '''
+    #holds the distance
+    dist = 0
+    #for each parameter/dimension in each item
+    for i in range(len(X1)):
+        #add the square of the difference between the i-th parameter in each of the items we are comparing
+        dist += (X2[i] - X1[i]) ** 2
+    
+    #return the squareroot of the dist so far
+    return math.sqrt(dist)
+
+class _item:
+    '''
+        This class holds an item in the dataset, both parameters and label.
+    '''
+
+    def __init__(self, X,Y=-1,distFunc=eucdist):
+        '''
+            The constructor for the item class. Requires parameters of a single training example. 
+            A label should be provided if it is a true training example.
+            A distance function can also be provided. If not, euclidean distance is used.
+
+            Parameters:
+                X: Parameters of training example
+                Y: Label of training example, default -1
+                distFunc: Distance function to be used for this instance, default euclidean distance.
+            
+            Result:
+                Instance of item class
+        '''
+        super().__init__()
+        self.distFunc = distFunc
+        self.X = X
+        self.label = Y
+    
+    def dist(self, other):
+        '''
+            Runs the provided distance function for this class, comparing a provided item.
+
+            Parameters:
+                Other: The other item to compare to
+             
+            Result:
+                The distance between the instance of this class and the instance of an item class provided as an parameter.
+        '''
+        return self.distFunc(self.X, other.X)
+
