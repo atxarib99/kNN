@@ -35,14 +35,9 @@ for k in ks:
     #for each validation example
     for i in range(len(validX)):
         #try to predict its label using training data
-        guess = trainer.predict(validX[i])
-        #cast guesses to T/F
-        if guess > .5:
-            guessRound = 1
-        else:
-            guessRound = 0
+        confidence, guess = trainer.predict(validX[i], negativeValue=0)
         #check if wrong
-        if guessRound != validY[i]:
+        if guess != validY[i]:
             error += 1
     #save error
     validErrors[k] = (error / len(validX))
@@ -67,14 +62,9 @@ error = 0
 #for each item in test data
 for i in range(len(testX)):
     #try to predict its label using training data
-    guess = trainer.predict(testX[i])
-    #cast guesses to T/F
-    if guess > .5:
-        guessRound = 1
-    else:
-        guessRound = 0
+    confidence, guess = trainer.predict(testX[i], negativeValue=0)
     #check if wrong
-    if guessRound != testY[i]:
+    if guess != testY[i]:
         error += 1
 
 #print error and accuract

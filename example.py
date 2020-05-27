@@ -34,18 +34,16 @@ guessZeroY = []
 #for each test element 
 for i in range(len(testParameters)):
     #use trainer to get a guess
-    guess = trainer.predict(testParameters[i])
+    confidence,guess = trainer.predict(testParameters[i], negativeValue=0)
     #cast guess to 1 or 0. Add the test element to corresponding list
-    if guess < .5:
+    if guess == 0:
         guessZeroX.append(testParameters[i][0])
         guessZeroY.append(testParameters[i][1])
-        correctedGuess = 0
     else:
         guessOneX.append(testParameters[i][0])
         guessOneY.append(testParameters[i][1])
-        correctedGuess = 1
     #check if we were incorrect
-    if correctedGuess != testLabel[i]:
+    if guess != testLabel[i]:
         error += 1
 
 #calcuate and print error

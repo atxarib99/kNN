@@ -23,14 +23,9 @@ error = 0
 #for each test element 
 for i in range(len(testParameters)):
     #use trainer to get a guess
-    guess = trainer.predict(testParameters[i])
-    #cast guess to 1 or 0.
-    if guess < .5:
-        correctedGuess = 0
-    else:
-        correctedGuess = 1
+    confidence,guess = trainer.predict(testParameters[i], negativeValue=0)
     #check if we were incorrect
-    if correctedGuess != testLabel[i]:
+    if guess != testLabel[i]:
         error += 1
 
 #calcuate and print error
